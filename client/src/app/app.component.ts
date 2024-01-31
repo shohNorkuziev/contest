@@ -10,4 +10,10 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'client';
+
+  task={
+    id:1,
+    title:"shohruh",
+    isComplete: false
+  }
 }
