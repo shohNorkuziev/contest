@@ -8,9 +8,9 @@ import { ThemeService } from './theme.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, HeaderComponent, FooterComponent],
+  imports: [ CommonModule, HeaderComponent, FooterComponent,RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   constructor(private themeService: ThemeService) {}

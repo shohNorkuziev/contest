@@ -1,9 +1,11 @@
 import { ApplicationConfig } from '@angular/core';
-import { AppRoutingModule } from './app.routes';
+import { provideRouter } from '@angular/router';
 import { provideClientHydration, } from '@angular/platform-browser';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideClientHydration(),
+    provideRouter(routes)
   ],
 };
