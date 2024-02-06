@@ -1,35 +1,25 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { ThemeService } from './theme.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgFor, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'To-Do';
+  constructor(private themeService: ThemeService) {}
 
-  filter: "all" | "active" | "done" = "all"
-
-  allItems = [
-    { description: "eat", done: true },
-    { description: "sleep", done: false },
-    { description: "play", done: false },
-    { description: "laugh", done: false },
-  ]
-
-  get item(){
-    if (this.filter === "all") {
-      return this.allItems
-    }
-    return this.allItems.filter((item) =>
-    this.filter === "done" ? item.done : !item.done
-    )
+  get isDarkTheme(): boolean {
+    return this.themeService.getIsDarkTheme();
   }
 
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
 }

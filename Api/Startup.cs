@@ -33,9 +33,10 @@ namespace Api
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<Users, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddIdentity<Users, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
