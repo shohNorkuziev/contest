@@ -47,7 +47,6 @@ public async Task<IActionResult> Register([FromBody] Users model)
         Email = model.Email,
         FirstName = model.FirstName,
         LastName = model.LastName,
-        Password = model.Password
     };
 
     var result = await _userManager.CreateAsync(user, model.Password);
@@ -60,6 +59,8 @@ public async Task<IActionResult> Register([FromBody] Users model)
 
     return BadRequest(result.Errors);
 }
+
+
 
 
    [HttpPut("{id}")]

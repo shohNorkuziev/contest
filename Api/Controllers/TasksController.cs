@@ -34,14 +34,28 @@ public class TasksController : ControllerBase
         return taskItem;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<TaskItem>> PostTask(TaskItem taskItem)
-    {
-        _context.Tasks.Add(taskItem);
-        await _context.SaveChangesAsync();
+   [HttpPost]
+public async Task<ActionResult<TaskItem>> PostTask([FromBody] TaskItem taskItem)
+{
+    // Проверка существования пользователя и темы
+    var user = await _context.Users.FindAsync(taskItem.UsersId);
+    var themeTask = await _context.ThemeTasks.FindAsync(taskItem.ThemeTaskId);
 
-        return CreatedAtAction(nameof(GetTask), new { id = taskItem.Id }, taskItem);
+    if (user == null || themeTask == null)
+    {
+        // Пользователь или тема не найдены
+        return NotFound("User or ThemeTask not found");
     }
+
+    // Установка связей
+    taskItem.Users = user;
+    taskItem.ThemeTask = themeTask;
+
+    _context.Tasks.Add(taskItem);
+    await _context.SaveChangesAsync();
+
+    return CreatedAtAction(nameof(GetTask), new { id = taskItem.Id }, taskItem);
+}
 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutTask(int id, TaskItem taskItem)

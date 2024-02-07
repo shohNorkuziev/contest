@@ -11,7 +11,5 @@ public class Users : IdentityUser<int>
     [EmailAddress]
     [Required]
     public override string Email { get; set; }
-
-    [Required]
     public string Password { get; set; }
 }
