@@ -1,43 +1,27 @@
+<div class="w-full bg-white rounded p-4 shadow" [ngClass]="{'dark-theme': isDarkTheme, 'light-theme': !isDarkTheme}" [ngStyle]="{
+  'background-color': isDarkTheme ? 'var(--bg-color-dark)' : 'var(--bg-color-light)',
+  'color': isDarkTheme ? 'var(--text-color-dark)' : 'var(--text-color-light)'
+}">
+  <h1 class="text-2xl font-bold mb-4">Список дел</h1>
 
-<div class="w-full  bg-white rounded p-4 shadow" >
-    <h1 class="text-2xl font-bold mb-4">Список дел</h1>
+  <form class="mb-4" >
+    <div class="flex items-center">
+      <input type="text" class="flex-1 border p-2 mr-2" placeholder="Добавить задачу">
+      <button type="submit" class="bg-blue-500 text-white p-2 rounded">Добавить</button>
+    </div>
+  </form>
 
-    <!-- Форма для добавления задачи -->
-    <form class="mb-4">
-      <div class="flex items-center">
-        <input type="text" class="flex-1 border p-2 mr-2" placeholder="Добавить задачу">
-        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Добавить</button>
-      </div>
-    </form>
 
-    <!-- Доска с листочками -->
-    <div class="bg-gray-200 p-4 rounded">
-      <!-- Листочек с задачами -->
-      <div class="bg-yellow-200 p-2 mb-2 rounded">
-        <h2 class="text-lg font-bold mb-2">Листочек 1</h2>
-        <!-- Задачи на листочке -->
-        <div class="flex items-center">
-          <input type="checkbox" class="mr-2">
-          <span>Задача на листочке 1</span>
-        </div>
-        <div class="flex items-center">
-          <input type="checkbox" class="mr-2">
-          <span>Задача на листочке 2</span>
-        </div>
-      </div>
+  <div class=" p-4 rounded" [ngStyle]="{'background-color': isDarkTheme ? 'var( --bg-color-menu-dark)' : 'var(--bg-color-menu-light)','color': isDarkTheme ? 'var(--text-color-dark)' : 'va(--text-color-light)'
+}">
 
-      <!-- Листочек 2 -->
-      <div class="bg-yellow-200 p-2 mb-2 rounded">
-        <h2 class="text-lg font-bold mb-2">Листочек 2</h2>
-        <!-- Задачи на листочке -->
-        <div class="flex items-center">
-          <input type="checkbox" class="mr-2">
-          <span>Задача на листочке 3</span>
-        </div>
-        <div class="flex items-center">
-          <input type="checkbox" class="mr-2">
-          <span>Задача на листочке 4</span>
-        </div>
+    <div *ngFor="let taskList of data" class=" p-2 mb-2 rounded">
+      <h2 class="text-lg font-bold mb-2">{{ taskList.title }}</h2>
+
+      <div *ngFor="let taskItem of taskList.tasks" class="flex items-center">
+        <input type="checkbox" class="mr-2" [checked]="taskItem.isCompleted">
+        <span>{{ taskItem.description }}</span>
       </div>
     </div>
   </div>
+</div>

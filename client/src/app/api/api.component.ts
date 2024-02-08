@@ -20,6 +20,6 @@ export class ApiComponent {
     private apiUrl = 'http://localhost:5000/api/Tasks';
     constructor(private http: HttpClient) { }
     getSomeData(): Observable<any> {
-      return this.http.get<any>(`${this.apiUrl}/some-endpoint`);
+      return this.http.get<any>(`${this.apiUrl}`);
     }
  }

@@ -44,12 +44,13 @@ namespace Api
 
     // Добавим CORS
 services.AddCors(options =>
-    {
-        options.AddPolicy("AllowSpecificOrigin",
-            builder => builder.WithOrigins("http://localhost:4200")
-                              .AllowAnyMethod()
-                              .AllowAnyHeader());
-    });
+{
+    options.AddPolicy("AllowAnyOrigin",
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 
     services.AddSwaggerGen(c =>
     {
@@ -68,8 +69,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
     }
 
-    // Разрешаем CORS
-    app.UseCors("AllowSpecificOrigin");
+    app.UseCors("AllowAnyOrigin");
 
     app.UseHttpsRedirection();
 
