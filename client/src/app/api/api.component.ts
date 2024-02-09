@@ -17,9 +17,13 @@ import { Observable } from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApiComponent {
-    private apiUrl = 'http://localhost:5000/api/Tasks';
+    private apiUrl = 'http://localhost:5000/api';
     constructor(private http: HttpClient) { }
     getSomeData(): Observable<any> {
       return this.http.get<any>(`${this.apiUrl}`);
     }
+    
+  postData(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/Users/register`, data);
+  }
  }

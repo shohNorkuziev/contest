@@ -12,7 +12,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
@@ -35,10 +34,11 @@ namespace Api
     services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-    services.AddIdentity<Users, IdentityRole<int>>()
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddRoles<IdentityRole<int>>()
-        .AddDefaultTokenProviders();
+services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole<int>>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
 
     services.AddControllers();
 

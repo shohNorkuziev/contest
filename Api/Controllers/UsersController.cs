@@ -14,9 +14,32 @@ public class UsersController : ControllerBase
     private readonly SignInManager<Users> _signInManager;
 
     public UsersController(UserManager<Users> userManager, SignInManager<Users> signInManager)
+{
+    _userManager = userManager;
+    _signInManager = signInManager;
+}
+
+[HttpPost("login")]
+public async Task<IActionResult> Login([FromBody] Users model)
+{
+    var user = await _userManager.FindByEmailAsync(model.Email);
+
+    if (user != null && await _userManager.CheckPasswordAsync(user, model.PasswordHash))
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
+        return Ok();
+    }
+    else
+    {
+        return BadRequest("Invalid login attempt");
+    }
+}
+
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return Ok();
     }
 
     [HttpGet]
@@ -37,7 +60,6 @@ public class UsersController : ControllerBase
         }
         return user;
     }
-    
 [HttpPost("register")]
 public async Task<IActionResult> Register([FromBody] Users model)
 {
@@ -49,7 +71,7 @@ public async Task<IActionResult> Register([FromBody] Users model)
         LastName = model.LastName,
     };
 
-    var result = await _userManager.CreateAsync(user, model.Password);
+    var result = await _userManager.CreateAsync(user, model.PasswordHash);
 
     if (result.Succeeded)
     {
@@ -63,10 +85,13 @@ public async Task<IActionResult> Register([FromBody] Users model)
 
 
 
-   [HttpPut("{id}")]
+
+
+
+  [HttpPut("{id}")]
 public async Task<IActionResult> PutUser(int id, Users users)
 {
-    if (id != Convert.ToInt32(users.Id))
+    if (id != Convert.ToInt32(users.Id)) 
     {
         return BadRequest();
     }
@@ -89,6 +114,7 @@ public async Task<IActionResult> PutUser(int id, Users users)
 
     return BadRequest(result.Errors);
 }
+
 
 [HttpDelete("{id}")]
 public async Task<IActionResult> DeleteUser(int id)

@@ -13,17 +13,15 @@ import { ThemeService } from '../theme.service';
 export class TasksComponent implements OnInit {
   data: any;
 
-  constructor(private ApiComponent: ApiComponent,private themeService: ThemeService) { }
+  constructor(private ApiComponent: ApiComponent, private themeService: ThemeService) { }
 
   ngOnInit() {
     this.ApiComponent.getSomeData().subscribe(
       (data) => {
-        // Обработка успешного ответа
         this.data = data;
         console.log('Данные получены:', this.data);
       },
       (error) => {
-        // Обработка ошибки
         console.error('Ошибка при получении данных:', error);
       }
     );

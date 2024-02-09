@@ -3,23 +3,40 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 [Route("api/[controller]")]
 [ApiController]
 public class TasksController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<Users> _userManager;
 
-    public TasksController(ApplicationDbContext context)
+    public TasksController(ApplicationDbContext context,UserManager<Users> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
+   [HttpGet]
+public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
+{
+    // Получаем текущего пользователя из контекста HTTP
+    var currentUser = await _userManager.GetUserAsync(User);
+
+    // Если текущий пользователь не найден, возвращаем ошибку
+    if (currentUser == null)
     {
-        return await _context.Tasks.ToListAsync();
+        return Unauthorized("User not found");
     }
+
+    // Получаем все задачи, созданные текущим пользователем
+    var userTasks = await _context.Tasks
+        .Where(task => task.UsersId == currentUser.Id)
+        .ToListAsync();
+
+    return userTasks;
+}
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TaskItem>> GetTask(int id)
