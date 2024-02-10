@@ -26,13 +26,21 @@ public async Task<IActionResult> Login([FromBody] Users model)
 
     if (user != null && await _userManager.CheckPasswordAsync(user, model.PasswordHash))
     {
-        return Ok();
+        // Вход выполнен успешно, возвращаем дополнительные данные
+        var response = new
+        {
+            success = true,
+            userId = user.Id
+        };
+        
+        return Ok(response);
     }
     else
     {
         return BadRequest("Invalid login attempt");
     }
 }
+
 
 
     [HttpPost("logout")]

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ThemeService } from '../theme.service';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
 @Component({
     selector: 'app-header',
     standalone: true,
@@ -14,7 +15,7 @@ import { RouterLink } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-    constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService, public authService: AuthService) {}
 
     get isDarkTheme(): boolean {
       return this.themeService.getIsDarkTheme();
@@ -22,6 +23,9 @@ export class HeaderComponent {
 
     toggleTheme(): void {
       this.themeService.toggleTheme();
+    }
+    logout(): void {
+      this.authService.logout();
     }
   }
 

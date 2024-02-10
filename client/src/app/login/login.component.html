@@ -7,7 +7,7 @@
     <img src="../../assets/images/icon.png" alt="" class=" h-20 w-20 mb-8">
     <h2 class="text-3xl font-light mb-4">Вход</h2>
 
-    <form >
+    <form (ngSubmit)="onSubmit()">
       <div class="mb-4">
         <input type="email" name="Email" placeholder="info@mailaddress.com" class="border p-2 w-full rounded-xl" [(ngModel)]="SignData.Email">
       </div>
@@ -19,9 +19,9 @@
       <div>
         <input type="submit" value="Войти" class="bg-gradient-to-r from-teal-400 to-teal-600 text-white p-2 rounded w-full">
       </div>
-      <div class="text-red-500">
+      <!-- <div class="text-red-500">
         Пожалуйста, проверьте правильность заполнения формы.
-      </div>
+      </div> -->
     </form>
 
     <p class="mt-4">Нет аккаунта? <a href="#" class="text-teal-400">Зарегестрируйся</a></p>

@@ -1,4 +1,4 @@
-<div class="w-full bg-white rounded p-4 shadow" [ngClass]="{'dark-theme': isDarkTheme, 'light-theme': !isDarkTheme}" [ngStyle]="{
+<!-- <div class="w-full bg-white rounded p-4 shadow" [ngClass]="{'dark-theme': isDarkTheme, 'light-theme': !isDarkTheme}" [ngStyle]="{
   'background-color': isDarkTheme ? 'var(--bg-color-dark)' : 'var(--bg-color-light)',
   'color': isDarkTheme ? 'var(--text-color-dark)' : 'var(--text-color-light)'
 }">
@@ -24,4 +24,40 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+<p>
+  Enjoy :)
+</p>
+
+<div class="root">
+  <div class="board">
+    <div class="board-wrapper">
+      <div class="board-columns">
+        
+        <div cdkDropList 
+            cdkDropListOrientation="horizontal" class="board-columns"
+            (cdkDropListDropped)="dropGrid($event)">
+        <div 
+           cdkDragLockAxis="x" class="board-column" 
+           *ngFor="let column of board.columns" cdkDrag>
+          <div class="column-title" cdkDragHandle>
+            {{ column.name }}
+          </div>
+          <div class="tasks-container"
+          id="{{column.id}}"
+          [cdkDropListConnectedTo]="['21', '32']"
+          cdkDropList
+          [cdkDropListData]="column.tasks"
+          (cdkDropListDropped)="drop($event)">
+            <div class="task" *ngFor="let item of column.tasks" cdkDrag>
+              {{ item }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      </div>
+    </div>
+  </div>

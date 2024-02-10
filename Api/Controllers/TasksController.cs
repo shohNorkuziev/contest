@@ -12,31 +12,28 @@ public class TasksController : ControllerBase
     private readonly ApplicationDbContext _context;
     private readonly UserManager<Users> _userManager;
 
-    public TasksController(ApplicationDbContext context,UserManager<Users> userManager)
+    public TasksController(ApplicationDbContext context, UserManager<Users> userManager)
     {
         _context = context;
         _userManager = userManager;
     }
 
-   [HttpGet]
-public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
-{
-    // Получаем текущего пользователя из контекста HTTP
-    var currentUser = await _userManager.GetUserAsync(User);
-
-    // Если текущий пользователь не найден, возвращаем ошибку
-    if (currentUser == null)
+    [HttpGet("get/{UsersId}")]
+    public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks(int UsersId)
     {
-        return Unauthorized("User not found");
+        var currentUser = await _userManager.FindByIdAsync(UsersId.ToString());
+
+        if (currentUser == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var userTasks = await _context.Tasks
+            .Where(task => task.UsersId == currentUser.Id)
+            .ToListAsync();
+
+        return userTasks;
     }
-
-    // Получаем все задачи, созданные текущим пользователем
-    var userTasks = await _context.Tasks
-        .Where(task => task.UsersId == currentUser.Id)
-        .ToListAsync();
-
-    return userTasks;
-}
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TaskItem>> GetTask(int id)
@@ -51,28 +48,25 @@ public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
         return taskItem;
     }
 
-   [HttpPost]
-public async Task<ActionResult<TaskItem>> PostTask([FromBody] TaskItem taskItem)
-{
-    // Проверка существования пользователя и темы
-    var user = await _context.Users.FindAsync(taskItem.UsersId);
-    var themeTask = await _context.ThemeTasks.FindAsync(taskItem.ThemeTaskId);
-
-    if (user == null || themeTask == null)
+    [HttpPost]
+    public async Task<ActionResult<TaskItem>> PostTask([FromBody] TaskItem taskItem)
     {
-        // Пользователь или тема не найдены
-        return NotFound("User or ThemeTask not found");
+        var user = await _context.Users.FindAsync(taskItem.UsersId);
+        var themeTask = await _context.ThemeTasks.FindAsync(taskItem.ThemeTaskId);
+
+        if (user == null || themeTask == null)
+        {
+            return NotFound("User or ThemeTask not found");
+        }
+
+        taskItem.Users = user;
+        taskItem.ThemeTask = themeTask;
+
+        _context.Tasks.Add(taskItem);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetTask), new { id = taskItem.Id }, taskItem);
     }
-
-    // Установка связей
-    taskItem.Users = user;
-    taskItem.ThemeTask = themeTask;
-
-    _context.Tasks.Add(taskItem);
-    await _context.SaveChangesAsync();
-
-    return CreatedAtAction(nameof(GetTask), new { id = taskItem.Id }, taskItem);
-}
 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutTask(int id, TaskItem taskItem)

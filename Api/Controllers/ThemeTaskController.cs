@@ -3,23 +3,39 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 [Route("api/[controller]")]
 [ApiController]
 public class ThemeTasksController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
-
-    public ThemeTasksController(ApplicationDbContext context)
+    private readonly UserManager<Users> _userManager;
+    public ThemeTasksController(ApplicationDbContext context, UserManager<Users> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<ThemeTask>>> GetThemeTasks()
+   [HttpGet("get/{UsersId}")]
+public async Task<ActionResult<IEnumerable<ThemeTask>>> GetThemeTasks(int UsersId)
+{
+    // Получаем текущего пользователя из контекста HTTP
+      var currentUser = await _userManager.FindByIdAsync(UsersId.ToString());
+
+    // Если текущий пользователь не найден, возвращаем ошибку
+    if (currentUser == null)
     {
-        return await _context.ThemeTasks.ToListAsync();
+        return Unauthorized("User not found");
     }
+
+    // Получаем все темы текущего пользователя
+    var userThemes = await _context.ThemeTasks
+        .Where(themeTask => themeTask.UsersId == currentUser.Id)
+        .ToListAsync();
+
+    return userThemes;
+}
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ThemeTask>> GetThemeTask(int id)

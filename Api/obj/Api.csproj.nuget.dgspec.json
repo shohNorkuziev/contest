@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Karl\\Desktop\\back\\Api\\Api.csproj": {}
+    "C:\\Users\\Karl\\Desktop\\contest-main\\api\\Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Karl\\Desktop\\back\\Api\\Api.csproj": {
+    "C:\\Users\\Karl\\Desktop\\contest-main\\api\\Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Karl\\Desktop\\back\\Api\\Api.csproj",
+        "projectUniqueName": "C:\\Users\\Karl\\Desktop\\contest-main\\api\\Api.csproj",
         "projectName": "Api",
-        "projectPath": "C:\\Users\\Karl\\Desktop\\back\\Api\\Api.csproj",
+        "projectPath": "C:\\Users\\Karl\\Desktop\\contest-main\\api\\Api.csproj",
         "packagesPath": "C:\\Users\\Karl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Karl\\Desktop\\back\\Api\\obj\\",
+        "outputPath": "C:\\Users\\Karl\\Desktop\\contest-main\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Karl\\AppData\\Roaming\\NuGet\\NuGet.Config",

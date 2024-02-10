@@ -12,11 +12,22 @@
       <nav>
         <ul [ngClass]="{'dark-theme': isDarkTheme, 'light-theme': !isDarkTheme}" class="space-y-2">
           <li><a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Главная</a></li>
-          <li><a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Профиль</a></li>
-          <li><a routerLink="/tasks" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Список задач</a></li>
-          <li><a routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Настройки</a></li>
-          <li><a routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Регистрация</a></li>
-          <li><a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Вход</a></li>
+          <ng-container  *ngIf="authService.isLoggedIn()">
+            <li><a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Профиль</a></li>
+            <li><a routerLink="/tasks" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Список задач</a></li>
+            <li><a routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Настройки</a></li>
+            <li ><button (click)="logout()" class="block p-2">Выход</button></li>
+          </ng-container>
+          
+  
+
+          <ng-container *ngIf="!authService.isLoggedIn()">
+            <li><a routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Регистрация</a></li>
+            <li><a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Вход</a></li>
+          </ng-container>
+
+ 
+        
             <label id="switch" class="switch">
               <input type="checkbox" (change)="toggleTheme()" [checked]="isDarkTheme" id="slider">
               <span class="slider round"></span>
