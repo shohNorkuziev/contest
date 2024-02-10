@@ -14,11 +14,12 @@ import { Task } from '../models/task.model';
 import { ThemeService } from '../theme.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [DragDropModule, CommonModule, FormsModule],
+  imports: [DragDropModule, CommonModule, FormsModule,MatIconModule],
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
@@ -33,7 +34,10 @@ export class TasksComponent implements OnInit  {
     Name: "",
     UsersId: this.authService.getUserId()
   }
+  
   themes: Theme[] = [];
+
+
   ngOnInit(): void {
     this.ApiComponent.getTheme(this.ThemeData.UsersId).subscribe(
       (themes: Theme[]) => {
@@ -41,7 +45,7 @@ export class TasksComponent implements OnInit  {
         themes.forEach((theme: Theme) => {
           this.ApiComponent.getTask(theme.id).subscribe(
             (tasks: Task[]) => {
-              const newColumn = new Column(theme.name, theme.id.toString(), tasks.map(task => task.title));
+              const newColumn = new Column(theme.name, theme.id.toString(), tasks);
               this.board.columns.push(newColumn);
             },
             (error) => {
@@ -56,18 +60,23 @@ export class TasksComponent implements OnInit  {
       }
     );
   }
+  
+  
+  
   public dropGrid(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex);
   }
 
-  public drop(event: CdkDragDrop<string[]>): void {
+  public drop(event: CdkDragDrop<Task[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex);
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
     }
   }
 
@@ -104,14 +113,6 @@ export class TasksComponent implements OnInit  {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Dialog closed with data:', result);
-        console.log('Data to be sent:', {
-          Title: result.Title,
-          IsCompleted: result.IsCompleted,
-          UsersId: this.authService.getUserId(),
-          ThemeTaskId: themeId,
-          Description: result.Description
-        });
         this.ApiComponent.createTask({
           Title: result.Title,
           IsCompleted: result.IsCompleted,
@@ -132,6 +133,49 @@ export class TasksComponent implements OnInit  {
     });
   }
   
-
+  editTask(themeId: string, task: Task): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '500px';
+    dialogConfig.height = '400px';
+  
+    const dialogRef = this.dialog.open(TaskDialogComponent, {
+      ...dialogConfig,
+      data: {
+        id:task.id,
+        Title: task.title,
+        IsCompleted: task.isCompleted,
+        UsersId: this.authService.getUserId(),
+        ThemeTaskId: task.ThemeTaskId,
+        Description: task.description
+      }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ApiComponent.updateTask(task.id, {
+          id:task.id,
+          Title: result.Title,
+          IsCompleted: result.IsCompleted,
+          UsersId: this.authService.getUserId(),
+          ThemeTaskId: themeId,
+          Description: result.Description
+        }).subscribe(
+          (response) => {
+            console.log('Task updated successfully:', response);
+            task.title = result.Title;
+            task.isCompleted = result.IsCompleted;
+            task.description = result.Description;
+          },
+          (error) => {
+            console.error('Error updating task:', error);
+          }
+        );
+      } else {
+        console.log('Dialog closed without data');
+      }
+    });
+  }
+  
   
 }

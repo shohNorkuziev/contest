@@ -48,6 +48,16 @@ export class ApiComponent {
     );
   }
 
+  updateTask(TaskId: number | null,data: any): Observable<any> {
+    console.log(data);
+    return this.http.put<any>(`${this.apiUrl}/Tasks/${TaskId}`,data).pipe(
+      catchError((error) => {
+        console.error('Error getting tasks:', error);
+        return throwError(error);
+      })
+    )
+  }
+
   getSomeData(userId: number | null): Observable<any> {
     if (userId !== null) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getUserId()}`);

@@ -57,7 +57,9 @@
                  [cdkDropListData]="column.tasks"
                  (cdkDropListDropped)="drop($event)">
               <div class="task" *ngFor="let item of column.tasks" cdkDrag>
-                {{ item }}
+                {{ item.title }}
+                <mat-icon (click)="editTask(column.id.toString(), item)">edit</mat-icon>
+
               </div>
             </div>
           </div>

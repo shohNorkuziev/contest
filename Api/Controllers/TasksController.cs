@@ -73,34 +73,35 @@ public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks(int ThemeTaskId)
         return CreatedAtAction(nameof(GetTask), new { id = taskItem.Id }, taskItem);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutTask(int id, TaskItem taskItem)
+  [HttpPut("{id}")]
+public async Task<IActionResult> PutTask(int id, TaskItem taskItem)
+{
+    if (id != taskItem.Id)
     {
-        if (id != taskItem.Id)
-        {
-            return BadRequest();
-        }
-
-        _context.Entry(taskItem).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!TaskItemExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
-
-        return NoContent();
+        return BadRequest("Некорректный идентификатор задачи");
     }
+
+    _context.Entry(taskItem).State = EntityState.Modified;
+
+    try
+    {
+        await _context.SaveChangesAsync();
+    }
+    catch (DbUpdateConcurrencyException)
+    {
+        if (TaskItemExists(id))
+        {
+            return BadRequest("Ошибка при обновлении задачи");
+        }
+        else
+        {
+            return NotFound("Задача не найдена");
+        }
+    }
+
+    // Возвращаем обновленную задачу или другую информацию, если необходимо
+    return NoContent();
+}
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTask(int id)
