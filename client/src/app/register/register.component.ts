@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ThemeService } from '../theme.service';
 import { ApiComponent } from '../api/api.component';
 import {
@@ -18,7 +18,7 @@ import { log } from 'console';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   public registrationData = new FormGroup({
     FirstName: new FormControl('',Validators.required),
     LastName: new FormControl('',Validators.required),
@@ -26,14 +26,6 @@ export class RegisterComponent implements OnInit {
     PasswordHash: new FormControl('',Validators.required),
   });
 
-  public ngOnInit(): void {}
-
-  // registrationData = {
-  //   FirstName: '',
-  //   LastName: '',
-  //   Email: '',
-  //   PasswordHash: '',
-  // };
   public registerUser(): void{
     if (this.registrationData.valid) {
           this.ApiComponent.postData(this.registrationData).subscribe(
