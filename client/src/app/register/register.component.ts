@@ -1,25 +1,42 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ThemeService } from '../theme.service';
 import { ApiComponent } from '../api/api.component';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { log } from 'console';
 
 @Component({
-    selector: 'app-register',
-    standalone: true,
-    imports: [CommonModule,FormsModule],
-    templateUrl: './register.component.html',
-    styleUrl: './register.component.css',
+  selector: 'app-register',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css',
 })
-export class RegisterComponent { 
-  registrationData = {
-    FirstName: '',
-    LastName: '',
-    Email: '',
-    PasswordHash: '',
-  };
-  registerUser(): void {
-    this.ApiComponent.postData(this.registrationData).subscribe(
+export class RegisterComponent implements OnInit {
+  public registrationData = new FormGroup({
+    FirstName: new FormControl('',Validators.required),
+    LastName: new FormControl('',Validators.required),
+    Email: new FormControl('',[Validators.required, Validators.email]),
+    PasswordHash: new FormControl('',Validators.required),
+  });
+
+  public ngOnInit(): void {}
+
+  // registrationData = {
+  //   FirstName: '',
+  //   LastName: '',
+  //   Email: '',
+  //   PasswordHash: '',
+  // };
+  public registerUser(): void{
+    if (this.registrationData.valid) {
+          this.ApiComponent.postData(this.registrationData).subscribe(
       (response) => {
         console.log('Успешно отправлено:', response);
       },
@@ -28,15 +45,24 @@ export class RegisterComponent {
         console.error( this.registrationData);
       }
     );
-  
-  }
-    constructor(private themeService: ThemeService,private ApiComponent: ApiComponent) {}
+    }else{
+      alert('no valid')
+    }
 
-    get isDarkTheme(): boolean {
-        return this.themeService.getIsDarkTheme();
-      }
-    
-      toggleTheme(): void {
-        this.themeService.toggleTheme();
-      }
+
+
+
+  }
+  constructor(
+    private themeService: ThemeService,
+    private ApiComponent: ApiComponent
+  ) {}
+
+  get isDarkTheme(): boolean {
+    return this.themeService.getIsDarkTheme();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
 }

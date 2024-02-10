@@ -18,22 +18,27 @@ public class TasksController : ControllerBase
         _userManager = userManager;
     }
 
-    [HttpGet("get/{UsersId}")]
-    public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks(int UsersId)
-    {
-        var currentUser = await _userManager.FindByIdAsync(UsersId.ToString());
+    [HttpGet("get/{ThemeTaskId}")]
+public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks(int ThemeTaskId)
+{
+    
+        var currentTheme = await _context.Tasks.FirstOrDefaultAsync(task => task.ThemeTaskId == ThemeTaskId);
 
-        if (currentUser == null)
+        if (currentTheme == null)
         {
-            return NotFound("User not found");
+            return NotFound("Задачи не найдены"); 
         }
 
         var userTasks = await _context.Tasks
-            .Where(task => task.UsersId == currentUser.Id)
+            .Where(task => task.ThemeTaskId == ThemeTaskId)
+            .AsNoTracking()
             .ToListAsync();
 
         return userTasks;
-    }
+    
+   
+}
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TaskItem>> GetTask(int id)

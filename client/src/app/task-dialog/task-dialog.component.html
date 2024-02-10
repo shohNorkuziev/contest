@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Add Task</h2>
+<form [formGroup]="taskForm">
+  <div mat-dialog-content>
+    <label>Title:</label>
+    <input matInput formControlName="Title" placeholder="Enter title" required>
+
+
+    <label>Description:</label>
+    <textarea matInput formControlName="Description" placeholder="Enter description"></textarea>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button><br>
+    <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+  </div>
+</form>

@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 .dark-theme {
   --bg-color-menu-dark: #313131;
@@ -28,4 +30,10 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
+}
+.mdc-dialog__container {
+  margin-top: -800px;
+  margin-left: 200px;
+  width: 500px;
+  height: 500px;
 }
