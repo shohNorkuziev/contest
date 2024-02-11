@@ -28,7 +28,7 @@ export class RegisterComponent {
 
   public registerUser(): void{
     if (this.registrationData.valid) {
-          this.ApiComponent.postData(this.registrationData).subscribe(
+          this.ApiComponent.postData(this.registrationData.value).subscribe(
       (response) => {
         console.log('Успешно отправлено:', response);
       },

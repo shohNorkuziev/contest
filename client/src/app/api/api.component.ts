@@ -39,12 +39,21 @@ export class ApiComponent {
     );
   }
 
-  getTask(ThemeId: number | null): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/Tasks/get/${ThemeId}`).pipe(
+
+  updateTheme(ThemeId: number | null,data: any): Observable<any> {
+    console.log(data);
+    return this.http.put<any>(`${this.apiUrl}/ThemeTasks/${ThemeId}`,data).pipe( 
       catchError((error) => {
         console.error('Error getting tasks:', error);
         return throwError(error);
       })
+    )
+  }
+
+
+  getTask(ThemeId: number | null): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/Tasks/get/${ThemeId}`).pipe(
+
     );
   }
 
@@ -58,6 +67,22 @@ export class ApiComponent {
     )
   }
 
+deleteTask(TaskId: number | null): Observable<any> {
+  return this.http.delete<any>(`${this.apiUrl}/Tasks/${TaskId}`).pipe(
+    catchError((error) => {
+      console.error('Error delete tasks:', error);
+      return throwError(error);
+    })
+  )
+}
+deleteTheme(ThemeId: number | null): Observable<any> {
+  return this.http.delete<any>(`${this.apiUrl}/ThemeTasks/${ThemeId}`).pipe(
+    catchError((error) => {
+      console.error('Error delete theme:', error);
+      return throwError(error);
+    })
+  )
+}
   getSomeData(userId: number | null): Observable<any> {
     if (userId !== null) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getUserId()}`);
@@ -74,6 +99,23 @@ export class ApiComponent {
 
   postData(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/Users/register`, data).pipe(
+      catchError((error) => {
+        console.error('Error posting data:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  getUser(id: number|null): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/Users/${id}`).pipe(
+      catchError((error) => {
+        console.error('Error posting data:', error);
+        return throwError(error);
+      })
+    );
+  }
+  updateUser(id: number,data:any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/Users/${id}`,data).pipe(
       catchError((error) => {
         console.error('Error posting data:', error);
         return throwError(error);

@@ -6,6 +6,7 @@ export interface Task {
     createdAt: string;
     ThemeTaskId:number;
     UsersId:number;
-    // Дополнительные свойства, если есть
+ 
   }
+  
   

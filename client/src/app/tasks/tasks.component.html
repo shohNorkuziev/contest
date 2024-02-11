@@ -35,31 +35,35 @@
 </form>
 
 
-<div class="root"  >
+<div class="root" [ngClass]="{'dark-theme': isDarkTheme, 'light-theme': !isDarkTheme}">
   <div class="board">
     <div class="board-wrapper">
       <div class="board-columns">
-        <div cdkDropList 
-             cdkDropListOrientation="horizontal" class="board-columns"
-             (cdkDropListDropped)="dropGrid($event)">
-          <div cdkDragLockAxis="x" class="board-column" 
-               *ngFor="let column of board.columns" cdkDrag>
+        <div cdkDropList cdkDropListOrientation="horizontal" class="board-columns" (cdkDropListDropped)="dropGrid($event)">
+          <div cdkDragLockAxis="x" class="board-column" *ngFor="let column of board.columns" cdkDrag [ngStyle]="{'background-color': isDarkTheme ? 'var( --bg-color-dark)' : 'var(--bg-color-light)','color': isDarkTheme ? 'var(--text-color-dark)' : 'va(--text-color-light)'}">
             <div class="column-title" cdkDragHandle>
-              {{ column.name }}
+              <ng-container *ngIf="!column.editMode; else editModeTemplate">
+                {{ column.name }}
+                <mat-icon (click)="toggleEditMode(column)">edit</mat-icon>
+              </ng-container>
+            
+              <ng-template #editModeTemplate>
+                <input [(ngModel)]="column.name" (blur)="exitThemeEditMode(column)" />
+                <mat-icon (click)="saveColumnName(+column.id, column)">save</mat-icon>
+                <mat-icon (click)="toggleEditMode(column)">cancel</mat-icon>
+              </ng-template>
+        
+              <!-- Добавлено условие для отображения значка удаления только если нет задач -->
+              <mat-icon *ngIf="column.tasks.length === 0" (click)="openDeleteDialogTheme(+column.id,column)">delete</mat-icon>
             </div>
            
             <button mat-raised-button (click)="openDialog(column.id)">+</button>
-        
-            <div class="tasks-container"
-                 id="{{ column.id }}"
-                 [cdkDropListConnectedTo]="['21', '32']"
-                 cdkDropList
-                 [cdkDropListData]="column.tasks"
-                 (cdkDropListDropped)="drop($event)">
-              <div class="task" *ngFor="let item of column.tasks" cdkDrag>
+          
+            <div class="tasks-container" id="{{ column.id }}" [cdkDropListConnectedTo]="['21', '32']" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="drop($event)" style="max-height: 300px; overflow-y: auto;">
+              <div class="task" *ngFor="let item of column.tasks" cdkDrag [ngStyle]="{'background-color': isDarkTheme ? 'var(--bg-color-menu-dark)' : 'var(--bg-color-menu-light)','color': isDarkTheme ? 'var(--text-color-dark)' : 'va(--text-color-light)'}">
                 {{ item.title }}
                 <mat-icon (click)="editTask(column.id.toString(), item)">edit</mat-icon>
-
+                <mat-icon (click)="openDeleteDialogTask(column.id.toString(), item)">delete</mat-icon>
               </div>
             </div>
           </div>

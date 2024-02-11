@@ -15,7 +15,6 @@
           <ng-container  *ngIf="authService.isLoggedIn()">
             <li><a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Профиль</a></li>
             <li><a routerLink="/tasks" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Список задач</a></li>
-            <li><a routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page" class="block p-2">Настройки</a></li>
             <li ><button (click)="logout()" class="block p-2">Выход</button></li>
           </ng-container>
           

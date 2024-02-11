@@ -96,22 +96,24 @@ public async Task<IActionResult> Register([FromBody] Users model)
 
 
 
-  [HttpPut("{id}")]
-public async Task<IActionResult> PutUser(int id, Users users)
+[HttpPut("{id}")]
+public async Task<IActionResult> PutUser(int id, [FromBody] Users model)
 {
-    if (id != Convert.ToInt32(users.Id)) 
+    if (id != Convert.ToInt32(model.Id)) 
     {
-        return BadRequest();
+        return BadRequest("не найден такой пользователь");
     }
 
     var existingUser = await _userManager.FindByIdAsync(id.ToString());
 
     if (existingUser == null)
     {
-        return NotFound();
+        return NotFound("пользователь не найден");
     }
 
-    existingUser.Email = users.Email;
+    existingUser.Email = model.Email;
+    existingUser.FirstName = model.FirstName;
+    existingUser.LastName = model.LastName;
 
     var result = await _userManager.UpdateAsync(existingUser);
 
@@ -122,6 +124,7 @@ public async Task<IActionResult> PutUser(int id, Users users)
 
     return BadRequest(result.Errors);
 }
+
 
 
 [HttpDelete("{id}")]

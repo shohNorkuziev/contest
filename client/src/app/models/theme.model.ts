@@ -1,7 +1,6 @@
-
-
-export class Theme {
-    constructor(public id: number, public name: string,public userId:number) {}
-
-  }
+export interface Theme {
+  id: number;
+  name: string;
+  userId: number | null; 
   
+}
