@@ -3,7 +3,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@a
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Board } from '../models/board.model';
 import { Column } from '../models/column.model';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { ApiComponent } from '../api/api.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
@@ -45,7 +45,7 @@ export class TasksComponent implements OnInit {
   private refreshBoard(): void {
     this.ApiComponent.getTheme(this.ThemeData.UsersId).subscribe(
       (themes: Theme[]) => {
-        this.themes = themes; 
+        this.themes = themes;
         this.board.columns = [];
         themes.forEach((theme: Theme) => {
           this.ApiComponent.getTask(theme.id).subscribe(
@@ -88,7 +88,6 @@ export class TasksComponent implements OnInit {
       (response) => {
         console.log('Успешно создана:', response);
         this.refreshBoard();
-        // Очистка поля ввода после успешного создания темы
         this.ThemeData.Name = "";
       },
       (error) => {
@@ -107,18 +106,18 @@ export class TasksComponent implements OnInit {
 
   public openDialog(themeId: string): void {
     if (!this.isDialogOpen) {
-      this.isDialogOpen = true; 
+      this.isDialogOpen = true;
       const dialogConfig = new MatDialogConfig();
       dialogConfig.autoFocus = true;
       dialogConfig.width = '500px';
       dialogConfig.height = '400px';
-    
+
       const dialogRef = this.dialog.open(TaskDialogComponent, {
         ...dialogConfig,
       });
-    
+
       dialogRef.afterClosed().subscribe(result => {
-        this.isDialogOpen = false; 
+        this.isDialogOpen = false;
 
         if (result) {
           this.ApiComponent.createTask({
@@ -142,16 +141,16 @@ export class TasksComponent implements OnInit {
       });
     }
   }
-  
 
-  
+
+
 
   public editTask(themeId: string, task: Task): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.width = '500px';
     dialogConfig.height = '400px';
-  
+
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       ...dialogConfig,
       data: {
@@ -163,7 +162,7 @@ export class TasksComponent implements OnInit {
         Description: task.description
       }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.ApiComponent.updateTask(task.id, {
@@ -236,10 +235,9 @@ export class TasksComponent implements OnInit {
 
   public toggleEditMode(column: Column): void {
     if (!column.editMode) {
-      // Сохраните оригинальное название перед входом в режим редактирования
       this.originalColumnName = column.name;
     } else {
-   
+
       column.name = this.originalColumnName;
     }
     column.editMode = !column.editMode;
@@ -265,10 +263,10 @@ export class TasksComponent implements OnInit {
   public enterThemeEditMode(column: Column): void {
     column.editMode = true;
   }
-  
+
   public exitThemeEditMode(column: Column): void {
     column.editMode = false;
   }
 
-  
+
 }

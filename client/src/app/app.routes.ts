@@ -1,4 +1,3 @@
-// app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, provideRouter } from '@angular/router';
 import { MainComponent } from './main/main.component';

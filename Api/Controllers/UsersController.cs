@@ -26,7 +26,6 @@ public async Task<IActionResult> Login([FromBody] Users model)
 
     if (user != null && await _userManager.CheckPasswordAsync(user, model.PasswordHash))
     {
-        // Вход выполнен успешно, возвращаем дополнительные данные
         var response = new
         {
             success = true,

@@ -18,7 +18,6 @@ export class AuthService {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // При загрузке приложения проверяем данные в localStorage
     if (isPlatformBrowser(this.platformId)) {
 
       const storedUserId = localStorage.getItem('userId');
@@ -51,7 +50,6 @@ export class AuthService {
           this.isLoggedInVar = true;
           this.userId = response.userId;
 
-          // Сохраняем данные в localStorage
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('userId', (this.userId ?? '').toString());
             localStorage.setItem('isLoggedInVar', 'true');
@@ -68,8 +66,7 @@ export class AuthService {
   logout(): void {
     this.isLoggedInVar = false;
     this.userId = null;
- 
-    // Очищаем данные в localStorage при выходе
+
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('userId');
       localStorage.removeItem('isLoggedInVar');

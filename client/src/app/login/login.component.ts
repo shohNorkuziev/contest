@@ -35,11 +35,6 @@ export class LoginComponent {
     Email: new FormControl('', [Validators.required, Validators.email]),
     PasswordHash: new FormControl('', Validators.required)
   })
-  // SignData = {
-  //   Email: '',
-  //   PasswordHash: '',
-  // };
-
   onSubmit(): void {
     if (this.SignData.valid) {
       this.authService.login(this.SignData.get(['Email'])?.value, this.SignData.get(['PasswordHash'])?.value).subscribe(

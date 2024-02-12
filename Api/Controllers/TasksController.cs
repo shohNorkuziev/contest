@@ -99,7 +99,7 @@ public async Task<IActionResult> PutTask(int id, TaskItem taskItem)
         }
     }
 
-    // Возвращаем обновленную задачу или другую информацию, если необходимо
+    
     return NoContent();
 }
 

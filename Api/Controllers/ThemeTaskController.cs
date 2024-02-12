@@ -20,16 +20,15 @@ public class ThemeTasksController : ControllerBase
    [HttpGet("get/{UsersId}")]
 public async Task<ActionResult<IEnumerable<ThemeTask>>> GetThemeTasks(int UsersId)
 {
-    // Получаем текущего пользователя из контекста HTTP
+  
       var currentUser = await _userManager.FindByIdAsync(UsersId.ToString());
 
-    // Если текущий пользователь не найден, возвращаем ошибку
+    
     if (currentUser == null)
     {
         return Unauthorized("User not found");
     }
 
-    // Получаем все темы текущего пользователя
     var userThemes = await _context.ThemeTasks
         .Where(themeTask => themeTask.UsersId == currentUser.Id)
         .ToListAsync();
